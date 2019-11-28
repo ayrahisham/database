@@ -1,0 +1,191 @@
+SQL> 
+SQL> /* ==============================================
+SQL> Student Name: Nur Suhaira
+SQL> Student Number: 5841549
+SQL> Description: Assignment 2 Task 1
+SQL> Date written: 30th April 2018
+SQL> ================================================*/
+SQL> -- Drop previously created tables
+SQL> 
+SQL> DROP TABLE PHARMACEUTICAL CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> DROP TABLE DOCTOR CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> DROP TABLE PATIENT CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> DROP TABLE DRUG CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> DROP TABLE PRESCRIPTION CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> 
+SQL> -- Create pharmaceutical table, relation of pharmaceutical company
+SQL> 
+SQL> CREATE TABLE PHARMACEUTICAL
+  2  (
+  3  	     -- Name of a pharmaceutical company
+  4  	     PharName VARCHAR2(30) NOT NULL,
+  5  	     -- The telephone number of a pharmaceutical company
+  6  	     PharTelephone VARCHAR2(25),
+  7  	     -- Primary key = PharName
+  8  	     CONSTRAINT phar_pk PRIMARY KEY (PharName)
+  9  );
+
+Table created.
+
+SQL> 
+SQL> -- Create doctor table; relation of doctor issuing prescription
+SQL> 
+SQL> CREATE TABLE DOCTOR
+  2  (
+  3  	     -- Identification number of a doctor
+  4  	     DID VARCHAR2(20) NOT NULL,
+  5  	     -- The name of a doctor
+  6  	     DName VARCHAR2(50),
+  7  	     -- The specialty of a doctor
+  8  	     Specialty VARCHAR2(70),
+  9  	     -- The number of years of experiences
+ 10  	     YearOfExp NUMBER,
+ 11  	     -- Primary key = DID
+ 12  	     CONSTRAINT doc_pk PRIMARY KEY (DID)
+ 13  );
+
+Table created.
+
+SQL> 
+SQL> -- Create patient table; relation of patient receiving prescription
+SQL> 
+SQL> CREATE TABLE PATIENT
+  2  (
+  3  	     -- Identification number of a patient
+  4  	     PID VARCHAR2(20) NOT NULL,
+  5  	     -- The name of a patient
+  6  	     PName VARCHAR2(50),
+  7  	     -- The date birth of a patient
+  8  	     PDOB DATE,
+  9  	     -- The address of a patient
+ 10  	     PAddress VARCHAR2(70),
+ 11  	     -- The postal code of a patient
+ 12  	     PPostalCode VARCHAR2(12),
+ 13  	     -- The patient's family doctor
+ 14  	     FamilyDoctor VARCHAR2(20),
+ 15  	     -- Primary key = PID
+ 16  	     CONSTRAINT patient_pk PRIMARY KEY (PID),
+ 17  	     -- Foreign key = FamilyDoctor ref. DOCTOR (DID)
+ 18  	     CONSTRAINT patient_fk FOREIGN KEY (FamilyDoctor) references
+ 19  	     DOCTOR (DID)
+ 20  );
+
+Table created.
+
+SQL> 
+SQL> -- Create drug table; relation of drug supplied by various pharmaceutical co.
+SQL> 
+SQL> CREATE TABLE DRUG
+  2  (
+  3  	     -- Name of a pharmaceutical co. supplying the drug
+  4  	     PharName VARCHAR2(30) NOT NULL,
+  5  	     -- Tradename of of a drug
+  6  	     TradeName VARCHAR2(30) NOT NULL,
+  7  	     -- The formula used for the drug
+  8  	     Formula VARCHAR2(70),
+  9  	     -- Primary key = PharName, TradeName
+ 10  	     CONSTRAINT drug_pk PRIMARY KEY (PharName, TradeName),
+ 11  	     -- Foreign key = PharName ref. PHARMACEUTICAL (PharName)
+ 12  	     CONSTRAINT drug_fk FOREIGN KEY (PharName) references
+ 13  	     PHARMACEUTICAL (PharName)
+ 14  );
+
+Table created.
+
+SQL> 
+SQL> -- Create prescription table; relation of prescription prescribed
+SQL> 
+SQL> CREATE TABLE PRESCRIPTION
+  2  (
+  3  	     -- Id. of doctor issuing the prescription
+  4  	     DID VARCHAR2(20) NOT NULL,
+  5  	     -- Id. of patient receiving the prescription
+  6  	     PID VARCHAR2(20) NOT NULL,
+  7  	     -- Name of pharmaceutical co. supplying the drug
+  8  	     PharName VARCHAR2(30),
+  9  	     -- Trade name of the drug
+ 10  	     TradeName VARCHAR2(30),
+ 11  	     -- Date of prescription
+ 12  	     PrescriptionDT DATE,
+ 13  	     -- Quantity of the drug prescribed
+ 14  	     Quantity NUMBER,
+ 15  	     -- Primary key = DID, PID, PharName, TradeName, PrescriptionDate
+ 16  	     CONSTRAINT pres_pk PRIMARy KEY (DID, PID, PharName, TradeName, PrescriptionDT),
+ 17  	     -- Foreign key = DID ref. DOCTOR (DID)
+ 18  	     CONSTRAINT pres_fk1 FOREIGN KEY (DID) references
+ 19  	     DOCTOR (DID),
+ 20  	     -- Foreign key = PID ref. PATIENT (PID)
+ 21  	     CONSTRAINT pres_fk2 FOREIGN KEY (PID) references
+ 22  	     PATIENT (PID),
+ 23  	     -- Foreign key = PharName, TradeName ref. DRUG (PharName, TradeName)
+ 24  	     CONSTRAINT pres_fk3 FOREIGN KEY (PharName, TradeName) references
+ 25  	     DRUG (PharName, TradeName),
+ 26  	     -- Constraint Check Quantity between 1 and 30
+ 27  	     CONSTRAINT qty CHECK
+ 28  	     (
+ 29  		     Quantity BETWEEN 1 AND 30
+ 30  	     )
+ 31  );
+
+Table created.
+
+SQL> 
+SQL> -- View table contents created
+SQL> DESC PHARMACEUTICAL;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ PHARTELEPHONE                                      VARCHAR2(25)
+
+SQL> DESC DOCTOR;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ DNAME                                              VARCHAR2(50)
+ SPECIALTY                                          VARCHAR2(70)
+ YEAROFEXP                                          NUMBER
+
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+
+SQL> DESC DRUG;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ FORMULA                                            VARCHAR2(70)
+
+SQL> DESC PRESCRIPTION;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ PID                                       NOT NULL VARCHAR2(20)
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ PRESCRIPTIONDT                            NOT NULL DATE
+ QUANTITY                                           NUMBER
+
+SQL> 
+SQL> SPOOL OFF;

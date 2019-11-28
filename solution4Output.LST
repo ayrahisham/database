@@ -1,0 +1,285 @@
+SQL> 
+SQL> /* ==============================================
+SQL> Student Name: Nur Suhaira
+SQL> Student Number: 5841549
+SQL> Description: Assignment 2 Task 4
+SQL> Date written: 3rd May 2018
+SQL> ================================================
+SQL> 
+SQL> ====================Qn 4(a)=====================*/
+SQL> 
+SQL> -- Grant the user account SYSTEM such that
+SQL> -- SYSTEM can retrieve or modify any relational tables
+SQL> -- except PRESCRIPTION, and SYSTEM is able to grant
+SQL> -- any of these privileges to other users.
+SQL> 
+SQL> SELECT TABLE_NAME FROM USER_TABLES;
+
+TABLE_NAME                                                                      
+------------------------------                                                  
+PHARMACEUTICAL                                                                  
+DOCTOR                                                                          
+PATIENT                                                                         
+DRUG                                                                            
+CHEF                                                                            
+SPECIALITY                                                                      
+CLIENT                                                                          
+PARTY                                                                           
+FEEDBACK                                                                        
+CHEFPARTY                                                                       
+PHARMACIST                                                                      
+
+TABLE_NAME                                                                      
+------------------------------                                                  
+PRESCRIPTION                                                                    
+
+12 rows selected.
+
+SQL> 
+SQL> GRANT SELECT, UPDATE ON PHARMACEUTICAL TO SYSTEM
+  2  WITH GRANT OPTION;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SELECT, UPDATE ON DOCTOR TO SYSTEM
+  2  WITH GRANT OPTION;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SELECT, UPDATE ON PATIENT TO SYSTEM
+  2  WITH GRANT OPTION;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SELECT, UPDATE ON DRUG TO SYSTEM
+  2  WITH GRANT OPTION;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SELECT, UPDATE ON PHARMACIST TO SYSTEM
+  2  WITH GRANT OPTION;
+
+Grant succeeded.
+
+SQL> 
+SQL> --===============END OF Qn 4(a)=================
+SQL> 
+SQL> --=====================4(b)=====================
+SQL> 
+SQL> -- Grant the user account SYSTEM such that SYSTEM
+SQL> -- can retrieve all details of DOCTOR and PRESCRIPTION
+SQL> -- prescribed by the doctor 'Steve Miller'.
+SQL> 
+SQL> -- Delete all previously created values
+SQL> 
+SQL> UPDATE PATIENT SET FAMILYDOCTOR = NULL
+  2  WHERE FAMILYDOCTOR = '1209123';
+
+1 row updated.
+
+SQL> 
+SQL> DELETE PRESCRIPTION WHERE DID = '1209123';
+
+1 row deleted.
+
+SQL> DELETE PATIENT WHERE PID = 'S7512890G';
+
+1 row deleted.
+
+SQL> DELETE DOCTOR WHERE DID = '1209123';
+
+1 row deleted.
+
+SQL> 
+SQL> DROP ROLE SYSTEMROLE_V1;
+
+Role dropped.
+
+SQL> DROP VIEW PRESCRIPTION_SM;
+
+View dropped.
+
+SQL> 
+SQL> -- Grant yourself the access
+SQL> GRANT CREATE VIEW TO USER024;
+
+Grant succeeded.
+
+SQL> 
+SQL> -- Insert values into the respective tables
+SQL> DESC DOCTOR;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ DNAME                                              VARCHAR2(50)
+ SPECIALTY                                          VARCHAR2(70)
+ YEAROFEXP                                          NUMBER
+
+SQL> 
+SQL> INSERT INTO DOCTOR (DID, DNAME, SPECIALTY, YEAROFEXP)
+  2  VALUES ('1209123', 'Doctor Steve Miller', 'Dermatology', '5');
+
+1 row created.
+
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+ PGENDER                                            VARCHAR2(1)
+
+SQL> 
+SQL> INSERT INTO PATIENT (PID, PNAME, PDOB, PADDRESS, PPOSTALCODE, FAMILYDOCTOR, PGENDER)
+  2  VALUES ('S7512890G', 'Delta Tan', '24-MAY-2010', 'Simei Street 5', '123456', '1209123', 'M');
+
+1 row created.
+
+SQL> 
+SQL> DESC PRESCRIPTION;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ PID                                       NOT NULL VARCHAR2(20)
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ PRESCRIPTIONDT                            NOT NULL DATE
+ QUANTITY                                           NUMBER
+ FAMILYPHARMACIST                                   VARCHAR2(10)
+
+SQL> 
+SQL> INSERT INTO PRESCRIPTION (DID, PID, PHARNAME, TRADENAME, PRESCRIPTIONDT, QUANTITY, FAMILYPHARMACIST)
+  2  VALUES ('1209123', 'S7512890G', 'Raffles Co.', 'Propranolol', SYSDATE, '10', 'PH0004');
+
+1 row created.
+
+SQL> 
+SQL> GRANT CREATE ROLE TO USER024;
+
+Grant succeeded.
+
+SQL> 
+SQL> CREATE ROLE SYSTEMROLE_V1;
+
+Role created.
+
+SQL> 
+SQL> CREATE VIEW PRESCRIPTION_SM
+  2  AS SELECT * FROM PRESCRIPTION
+  3  WHERE DID IN
+  4  (SELECT DID
+  5  FROM DOCTOR
+  6  WHERE DNAME = 'Doctor Steve Miller');
+
+View created.
+
+SQL> 
+SQL> GRANT SELECT
+  2  ON DOCTOR
+  3  TO SYSTEMROLE_V1;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SELECT
+  2  ON PRESCRIPTION_SM
+  3  TO SYSTEMROLE_V1;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SYSTEMROLE_V1
+  2  TO SYSTEM;
+
+Grant succeeded.
+
+SQL> 
+SQL> --===============END OF Qn 4(b)=================
+SQL> 
+SQL> --=================Qn 4(c)======================
+SQL> 
+SQL> -- Grant the user account SYSTEM the right to refer
+SQL> -- to the primary key of the relational table DRUG
+SQL> -- from foreign keys included in the relational tables
+SQL> -- owned by SYSTEM.
+SQL> 
+SQL> DESC DRUG;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ FORMULA                                            VARCHAR2(70)
+
+SQL> 
+SQL> GRANT REFERENCES (PHARNAME, TRADENAME) ON DRUG TO SYSTEM;
+
+Grant succeeded.
+
+SQL> 
+SQL> --===============END OF Qn 4(c)=================
+SQL> 
+SQL> --=================Qn 4(d)======================
+SQL> 
+SQL> -- Grant the user account SYSTEM the right
+SQL> -- to retrieve the patient’s identification number,
+SQL> -- name, and family doctor.
+SQL> 
+SQL> -- Delete previously created values
+SQL> 
+SQL> DROP ROLE SYSTEMROLE_V2;
+
+Role dropped.
+
+SQL> DROP VIEW V_PATIENT;
+
+View dropped.
+
+SQL> 
+SQL> CREATE ROLE SYSTEMROLE_V2;
+
+Role created.
+
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+ PGENDER                                            VARCHAR2(1)
+
+SQL> 
+SQL> CREATE VIEW V_PATIENT AS
+  2  SELECT PID, PNAME, FAMILYDOCTOR
+  3  FROM PATIENT;
+
+View created.
+
+SQL> 
+SQL> GRANT SELECT
+  2  ON V_PATIENT
+  3  TO SYSTEMROLE_V2;
+
+Grant succeeded.
+
+SQL> 
+SQL> GRANT SYSTEMROLE_V2
+  2  TO SYSTEM;
+
+Grant succeeded.
+
+SQL> 
+SQL> --===============END OF Qn 4(d)=================
+SQL> 
+SQL> SPOOL OFF;

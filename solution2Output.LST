@@ -1,0 +1,156 @@
+SQL> 
+SQL> /* ==============================================
+SQL> Student Name: Nur Suhaira
+SQL> Student Number: 5841549
+SQL> Description: Assignment 2 Task 2
+SQL> Date written: 1st May 2018
+SQL> ================================================
+SQL> 
+SQL> ====================Qn 2(a)=====================*/
+SQL> 
+SQL> -- The owner of the database would like to speed up
+SQL> -- the queries of information about patients.
+SQL> -- The information is retrieved through providing
+SQL> -- a patient name.
+SQL> 
+SQL> -- Delete previous created index
+SQL> 
+SQL> DROP INDEX P_INDEX;
+
+Index dropped.
+
+SQL> 
+SQL> CREATE INDEX P_INDEX ON PATIENT(PNAME);
+
+Index created.
+
+SQL> 
+SQL> --=================END OF Qn 2(a)=================
+SQL> 
+SQL> --====================Qn 2(b)=====================
+SQL> 
+SQL> -- The owner of the database would like to add
+SQL> -- to the database a gender of the patient.
+SQL> -- The values ‘M’ and ‘F’ must be used to indicate
+SQL> -- if a patient is male or female.
+SQL> 
+SQL> -- Delete previously created gender column in patient
+SQL> 
+SQL> ALTER TABLE PATIENT DROP COLUMN PGENDER;
+
+Table altered.
+
+SQL> 
+SQL> -- View patient table
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+
+SQL> 
+SQL> -- Add gender column in patient table
+SQL> 
+SQL> ALTER TABLE PATIENT ADD (PGender VARCHAR2(1));
+
+Table altered.
+
+SQL> ALTER TABLE PATIENT ADD CONSTRAINT check_pgender
+  2  CHECK (PGENDER IN ('M', 'F'));
+
+Table altered.
+
+SQL> 
+SQL> -- View updated table
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+ PGENDER                                            VARCHAR2(1)
+
+SQL> 
+SQL> --=================END OF Qn 2(b)=================
+SQL> 
+SQL> --====================Qn 2(c)=====================
+SQL> 
+SQL> -- Delete previously created familypharmacist column in prescription
+SQL> 
+SQL> ALTER TABLE PRESCRIPTION DROP COLUMN FAMILYPHARMACIST;
+
+Table altered.
+
+SQL> 
+SQL> -- Drop previously created table
+SQL> 
+SQL> DROP TABLE PHARMACIST CASCADE CONSTRAINTS PURGE;
+
+Table dropped.
+
+SQL> 
+SQL> -- Create a pharmacist table who dispenses
+SQL> -- prescribed drugs and relationship
+SQL> -- with the prescription
+SQL> 
+SQL> CREATE TABLE PHARMACIST
+  2  (
+  3  	     -- A pharmacist is described by name, addressed and a license number.
+  4  	     PharLicenseNo VARCHAR2(10) NOT NULL,
+  5  	     PharmacistName VARCHAR2(30),
+  6  	     -- The license number uniquely identifies each pharmacist
+  7  	     PharmacistAddress VARCHAR2(70),
+  8  	     CONSTRAINT pharmacist_pk PRIMARY KEY (PharLicenseNo)
+  9  );
+
+Table created.
+
+SQL> 
+SQL> -- A pharmacist may dispense many prescription,
+SQL> -- and each prescription is dispensed only by one pharmacist
+SQL> 
+SQL> ALTER TABLE PRESCRIPTION ADD (FamilyPharmacist VARCHAR2(10));
+
+Table altered.
+
+SQL> ALTER TABLE PRESCRIPTION ADD CONSTRAINT pres_fk4
+  2  FOREIGN KEY (FamilyPharmacist) references
+  3  PHARMACIST (PharLicenseNo);
+
+Table altered.
+
+SQL> 
+SQL> -- View pharmacist table
+SQL> DESC PHARMACIST;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARLICENSENO                             NOT NULL VARCHAR2(10)
+ PHARMACISTNAME                                     VARCHAR2(30)
+ PHARMACISTADDRESS                                  VARCHAR2(70)
+
+SQL> 
+SQL> -- View prescription table
+SQL> DESC PRESCRIPTION;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ PID                                       NOT NULL VARCHAR2(20)
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ PRESCRIPTIONDT                            NOT NULL DATE
+ QUANTITY                                           NUMBER
+ FAMILYPHARMACIST                                   VARCHAR2(10)
+
+SQL> 
+SQL> --=================END OF Qn 2(c)=================
+SQL> 
+SQL> SPOOL OFF;

@@ -1,0 +1,150 @@
+SQL> 
+SQL> /* ==============================================
+SQL> Student Name: Nur Suhaira
+SQL> Student Number: 5841549
+SQL> Description: Assignment 2 Task 6
+SQL> Date written: 10th May 2018
+SQL> ================================================
+SQL> 
+SQL> ======================Qn 6=====================*/
+SQL> 
+SQL> -- Lists the names and the sizes (in KBytes) of the data objects
+SQL> -- (relational tables, indexes, etc) created and owned by you.
+SQL> -- The script should produce the following output.
+SQL> -- Object Names	     Size in KB
+SQL> --------------------------- ----------------
+SQL> -- ALLMAC			     64
+SQL> -- SERVES			     64
+SQL> -- ...
+SQL> 
+SQL> SELECT SEGMENT_NAME AS OBJECT_NAMES,  SUM(BLOCKS * 8 *1024) AS SIZE_IN_KB
+  2  FROM USER_SEGMENTS
+  3  GROUP BY SEGMENT_NAME;
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+P_INDEX                                                                         
+    262144                                                                      
+                                                                                
+CHEF_PK                                                                         
+    262144                                                                      
+                                                                                
+SPECIALITY_PK                                                                   
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+CLIENT_CLIENTEMAIL_UNIQUE                                                       
+    262144                                                                      
+                                                                                
+DOCTOR                                                                          
+    262144                                                                      
+                                                                                
+DRUG                                                                            
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+PHAR_PK                                                                         
+    262144                                                                      
+                                                                                
+DOC_PK                                                                          
+    262144                                                                      
+                                                                                
+PATIENT                                                                         
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+PARTY_PK                                                                        
+    262144                                                                      
+                                                                                
+PRESCRIPTION                                                                    
+    262144                                                                      
+                                                                                
+SPECIALITY                                                                      
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+CHEFPARTY                                                                       
+    262144                                                                      
+                                                                                
+PHARMACEUTICAL                                                                  
+    262144                                                                      
+                                                                                
+FEEDBACK                                                                        
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+DRUG_PK                                                                         
+    262144                                                                      
+                                                                                
+CLIENT_PK                                                                       
+    262144                                                                      
+                                                                                
+FEEDBACK_PK                                                                     
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+CHEF                                                                            
+    262144                                                                      
+                                                                                
+PRES_PK                                                                         
+    262144                                                                      
+                                                                                
+PHARMACIST_PK                                                                   
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+CLIENT                                                                          
+    262144                                                                      
+                                                                                
+PARTY                                                                           
+    262144                                                                      
+                                                                                
+PHARMACIST                                                                      
+    262144                                                                      
+                                                                                
+
+OBJECT_NAMES                                                                    
+--------------------------------------------------------------------------------
+SIZE_IN_KB                                                                      
+----------                                                                      
+PATIENT_PK                                                                      
+    262144                                                                      
+                                                                                
+CHEFPARTY_PK                                                                    
+    262144                                                                      
+                                                                                
+
+26 rows selected.
+
+SQL> 
+SQL> SPOOL OFF;

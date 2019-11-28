@@ -1,0 +1,395 @@
+SQL> 
+SQL> /* ==============================================
+SQL> Student Name: Nur Suhaira
+SQL> Student Number: 5841549
+SQL> Description: Assignment 2 Task 3
+SQL> Date written: 2nd May 2018
+SQL> ================================================
+SQL> 
+SQL> ====================Qn 3(a)=====================*/
+SQL> 
+SQL> -- Delete previously created values in tables
+SQL> 
+SQL> UPDATE PATIENT SET FAMILYDOCTOR = NULL
+  2  WHERE FAMILYDOCTOR = '3332858';
+
+3 rows updated.
+
+SQL> 
+SQL> TRUNCATE TABLE PRESCRIPTION;
+
+Table truncated.
+
+SQL> DELETE DOCTOR WHERE DID = '3332858';
+
+1 row deleted.
+
+SQL> DELETE DRUG WHERE TRADENAME = 'Propranolol';
+
+1 row deleted.
+
+SQL> DELETE PHARMACIST WHERE PHARLICENSENO = 'PH0004';
+
+1 row deleted.
+
+SQL> DELETE PATIENT WHERE PID = 'S2598868B';
+
+1 row deleted.
+
+SQL> DELETE PHARMACEUTICAL WHERE PHARNAME = 'Raffles Co.';
+
+1 row deleted.
+
+SQL> 
+SQL> -- A NEW female patient Ann Miller has appointed
+SQL> -- Doctor Martin Lucas as her family doctor.
+SQL> 
+SQL> DESC DOCTOR;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ DNAME                                              VARCHAR2(50)
+ SPECIALTY                                          VARCHAR2(70)
+ YEAROFEXP                                          NUMBER
+
+SQL> 
+SQL> -- The identification number of Doctor Martin Lucas is 3332858.
+SQL> -- Dr Martin Lucas has 10 years of experiences as general practitioner
+SQL> 
+SQL> INSERT INTO DOCTOR (DID, DNAME, SPECIALTY, YEAROFEXP)
+  2  VALUES ('3332858', 'Doctor Martin Lucas', 'General Practitioner', '10');
+
+1 row created.
+
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+ PGENDER                                            VARCHAR2(1)
+
+SQL> 
+SQL> -- The NRIC of Ann is S2598868B.
+SQL> -- Ann was born on 9 September 1992,
+SQL> -- and she lives at 22nd street, Singapore.
+SQL> -- The postal code Ann lives in is 650142.
+SQL> -- A NEW female patient Ann Miller has appointed
+SQL> -- Doctor Martin Lucas as her family doctor.
+SQL> 
+SQL> INSERT INTO PATIENT (PID, PNAME, PDOB, PADDRESS, PPOSTALCODE, FAMILYDOCTOR, PGENDER)
+  2  VALUES ('S2598868B', 'Ann Miller', '09-SEP-1992', '22nd street, Singapore', '650142', '3332858', 'F');
+
+1 row created.
+
+SQL> 
+SQL> -- Ann has been treated today for fever
+SQL> -- and has been prescribed with 10 tablets of
+SQL> -- the drug ‘Propranolol’ supplied by Pfizer
+SQL> 
+SQL> -- Insert appropriate values in pharmaceutical & drug tables
+SQL> 
+SQL> INSERT INTO PHARMACEUTICAL (PHARNAME, PHARTELEPHONE)
+  2  VALUES ('Raffles Co.', '65129807');
+
+1 row created.
+
+SQL> 
+SQL> SELECT * FROM PHARMACEUTICAL;
+
+PHARNAME                       PHARTELEPHONE                                    
+------------------------------ -------------------------                        
+Raffles Co.                    65129807                                         
+
+1 row selected.
+
+SQL> 
+SQL> DESC DRUG;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ FORMULA                                            VARCHAR2(70)
+
+SQL> 
+SQL> INSERT INTO DRUG (PHARNAME, TRADENAME, FORMULA)
+  2  VALUES ('Raffles Co.', 'Propranolol', 'C16H21NO2');
+
+1 row created.
+
+SQL> 
+SQL> DESC PHARMACIST;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PHARLICENSENO                             NOT NULL VARCHAR2(10)
+ PHARMACISTNAME                                     VARCHAR2(30)
+ PHARMACISTADDRESS                                  VARCHAR2(70)
+
+SQL> 
+SQL> INSERT INTO PHARMACIST (PHARLICENSENO, PHARMACISTNAME, PHARMACISTADDRESS)
+  2  VALUES ('PH0004', 'Pfizer', '12th Boolean St');
+
+1 row created.
+
+SQL> 
+SQL> DESC PRESCRIPTION;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ PID                                       NOT NULL VARCHAR2(20)
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ PRESCRIPTIONDT                            NOT NULL DATE
+ QUANTITY                                           NUMBER
+ FAMILYPHARMACIST                                   VARCHAR2(10)
+
+SQL> 
+SQL> INSERT INTO PRESCRIPTION (DID, PID, PHARNAME, TRADENAME, PRESCRIPTIONDT, QUANTITY, FAMILYPHARMACIST)
+  2  VALUES ('3332858', 'S2598868B', 'Raffles Co.', 'Propranolol', SYSDATE, '10', 'PH0004');
+
+1 row created.
+
+SQL> 
+SQL> SELECT * FROM DRUG WHERE TRADENAME = 'Propranolol';
+
+PHARNAME                       TRADENAME                                        
+------------------------------ ------------------------------                   
+FORMULA                                                                         
+----------------------------------------------------------------------          
+Raffles Co.                    Propranolol                                      
+C16H21NO2                                                                       
+                                                                                
+
+1 row selected.
+
+SQL> SELECT * FROM PHARMACIST WHERE PHARLICENSENO = 'PH0004';
+
+PHARLICENS PHARMACISTNAME                                                       
+---------- ------------------------------                                       
+PHARMACISTADDRESS                                                               
+----------------------------------------------------------------------          
+PH0004     Pfizer                                                               
+12th Boolean St                                                                 
+                                                                                
+
+1 row selected.
+
+SQL> SELECT * FROM DOCTOR WHERE DNAME = 'Doctor Martin Lucas';
+
+DID                  DNAME                                                      
+-------------------- --------------------------------------------------         
+SPECIALTY                                                                       
+----------------------------------------------------------------------          
+ YEAROFEXP                                                                      
+----------                                                                      
+3332858              Doctor Martin Lucas                                        
+General Practitioner                                                            
+        10                                                                      
+                                                                                
+
+1 row selected.
+
+SQL> SELECT * FROM PATIENT WHERE PNAME = 'Ann Miller';
+
+PID                  PNAME                                                      
+-------------------- --------------------------------------------------         
+PDOB      PADDRESS                                                              
+--------- ----------------------------------------------------------------------
+PPOSTALCODE  FAMILYDOCTOR         P                                             
+------------ -------------------- -                                             
+S2598868B            Ann Miller                                                 
+09-SEP-92 22nd street, Singapore                                                
+650142       3332858              F                                             
+                                                                                
+
+1 row selected.
+
+SQL> SELECT * FROM PRESCRIPTION WHERE PID = 'S2598868B';
+
+DID                  PID                  PHARNAME                              
+-------------------- -------------------- ------------------------------        
+TRADENAME                      PRESCRIPT   QUANTITY FAMILYPHAR                  
+------------------------------ --------- ---------- ----------                  
+3332858              S2598868B            Raffles Co.                           
+Propranolol                    12-MAY-18         10 PH0004                      
+                                                                                
+
+1 row selected.
+
+SQL> 
+SQL> --=================END OF Qn 3(a)===================
+SQL> 
+SQL> --=====================Qn 3(b)======================
+SQL> 
+SQL> --  Delete from the database all information related to the
+SQL> -- doctor Bruce Thompson including his relationship as
+SQL> -- a family doctor and the prescription prescribed by him.
+SQL> 
+SQL> -- Delete previously created values
+SQL> 
+SQL> DELETE PATIENT WHERE PID = 'S1234321T';
+
+1 row deleted.
+
+SQL> DELETE PATIENT WHERE PID = 'S1238922G';
+
+1 row deleted.
+
+SQL> 
+SQL> -- Create a tuple value in doctor table
+SQL> 
+SQL> DESC DOCTOR;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ DNAME                                              VARCHAR2(50)
+ SPECIALTY                                          VARCHAR2(70)
+ YEAROFEXP                                          NUMBER
+
+SQL> 
+SQL> INSERT INTO DOCTOR (DID, DNAME, SPECIALTY, YEAROFEXP)
+  2  VALUES ('4322128', 'Doctor Bruce Thompson', 'Surgeon', '11');
+
+1 row created.
+
+SQL> 
+SQL> DESC PATIENT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID                                       NOT NULL VARCHAR2(20)
+ PNAME                                              VARCHAR2(50)
+ PDOB                                               DATE
+ PADDRESS                                           VARCHAR2(70)
+ PPOSTALCODE                                        VARCHAR2(12)
+ FAMILYDOCTOR                                       VARCHAR2(20)
+ PGENDER                                            VARCHAR2(1)
+
+SQL> 
+SQL> INSERT INTO PATIENT (PID, PNAME, PDOB, PADDRESS, PPOSTALCODE, FAMILYDOCTOR, PGENDER)
+  2  VALUES ('S1234321T', 'Johnson Rad', '24-JUN-1994', '32nd Bencoolen Road', '341234', '4322128', 'M');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO PATIENT (PID, PNAME, PDOB, PADDRESS, PPOSTALCODE, FAMILYDOCTOR, PGENDER)
+  2  VALUES ('S1238922G', 'Phoebe Lia', '30-JUL-1971', '10th Beach Road', '341904', '4322128', 'F');
+
+1 row created.
+
+SQL> 
+SQL> DESC PRESCRIPTION;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DID                                       NOT NULL VARCHAR2(20)
+ PID                                       NOT NULL VARCHAR2(20)
+ PHARNAME                                  NOT NULL VARCHAR2(30)
+ TRADENAME                                 NOT NULL VARCHAR2(30)
+ PRESCRIPTIONDT                            NOT NULL DATE
+ QUANTITY                                           NUMBER
+ FAMILYPHARMACIST                                   VARCHAR2(10)
+
+SQL> 
+SQL> INSERT INTO PRESCRIPTION (DID, PID, PHARNAME, TRADENAME, PRESCRIPTIONDT, QUANTITY, FAMILYPHARMACIST)
+  2  VALUES ('4322128', 'S1234321T', 'Raffles Co.', 'Propranolol', SYSDATE, '4', 'PH0004');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO PRESCRIPTION (DID, PID, PHARNAME, TRADENAME, PRESCRIPTIONDT, QUANTITY, FAMILYPHARMACIST)
+  2  VALUES ('4322128', 'S1238922G', 'Raffles Co.', 'Propranolol', SYSDATE, '9', 'PH0004');
+
+1 row created.
+
+SQL> 
+SQL> -- View all information on Dr. Bruce Thompson
+SQL> SELECT * FROM DOCTOR WHERE DNAME LIKE '%Bruce Thompson';
+
+DID                  DNAME                                                      
+-------------------- --------------------------------------------------         
+SPECIALTY                                                                       
+----------------------------------------------------------------------          
+ YEAROFEXP                                                                      
+----------                                                                      
+4322128              Doctor Bruce Thompson                                      
+Surgeon                                                                         
+        11                                                                      
+                                                                                
+
+1 row selected.
+
+SQL> SELECT * FROM PATIENT WHERE FAMILYDOCTOR = '4322128';
+
+PID                  PNAME                                                      
+-------------------- --------------------------------------------------         
+PDOB      PADDRESS                                                              
+--------- ----------------------------------------------------------------------
+PPOSTALCODE  FAMILYDOCTOR         P                                             
+------------ -------------------- -                                             
+S1234321T            Johnson Rad                                                
+24-JUN-94 32nd Bencoolen Road                                                   
+341234       4322128              M                                             
+                                                                                
+S1238922G            Phoebe Lia                                                 
+30-JUL-71 10th Beach Road                                                       
+341904       4322128              F                                             
+
+PID                  PNAME                                                      
+-------------------- --------------------------------------------------         
+PDOB      PADDRESS                                                              
+--------- ----------------------------------------------------------------------
+PPOSTALCODE  FAMILYDOCTOR         P                                             
+------------ -------------------- -                                             
+                                                                                
+
+2 rows selected.
+
+SQL> SELECT * FROM PRESCRIPTION WHERE DID = '4322128';
+
+DID                  PID                  PHARNAME                              
+-------------------- -------------------- ------------------------------        
+TRADENAME                      PRESCRIPT   QUANTITY FAMILYPHAR                  
+------------------------------ --------- ---------- ----------                  
+4322128              S1234321T            Raffles Co.                           
+Propranolol                    12-MAY-18          4 PH0004                      
+                                                                                
+4322128              S1238922G            Raffles Co.                           
+Propranolol                    12-MAY-18          9 PH0004                      
+                                                                                
+
+2 rows selected.
+
+SQL> 
+SQL> -- Transfer ALL patients with Dr. Bruce Thompson to Dr. Martin Lucas;
+SQL> UPDATE PATIENT
+  2  SET FAMILYDOCTOR = '3332858'
+  3  WHERE FAMILYDOCTOR IN
+  4  (SELECT DID
+  5  FROM DOCTOR
+  6  WHERE DID = '4322128');
+
+2 rows updated.
+
+SQL> 
+SQL> -- Update ALL prescriptions by Dr. Bruce Thompson to their replaced doctor
+SQL> UPDATE PRESCRIPTION
+  2  SET DID = '3332858'
+  3  WHERE DID IN
+  4  (SELECT DID
+  5  FROM DOCTOR
+  6  WHERE DID = '4322128');
+
+2 rows updated.
+
+SQL> 
+SQL> DELETE DOCTOR WHERE DNAME = 'Doctor Bruce Thompson';
+
+1 row deleted.
+
+SQL> 
+SQL> --=================END OF Qn 3(b)===================
+SQL> 
+SQL> SPOOL OFF;
